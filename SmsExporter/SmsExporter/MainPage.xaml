@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SmsExporter"
+             x:Class="SmsExporter.MainPage">
+    <StackLayout IsEnabled="{Binding IsEnable}">
+        <!-- Place new controls here -->
+        <Label Text="短信导出工具" 
+           HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand" />
+        <Label HorizontalOptions="Center" LineBreakMode="CharacterWrap" Text="{Binding Message}" />
+        <ProgressBar Margin="4" HorizontalOptions="Fill" Progress="{Binding Progress}" />
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <Button Text="导出" HorizontalOptions="Center" Command="{Binding ExportCommand}" />
+            <Button Text="测试" HorizontalOptions="Center" Command="{Binding TestCommand}" />
+        </StackLayout>
+    </StackLayout>
+</ContentPage>
