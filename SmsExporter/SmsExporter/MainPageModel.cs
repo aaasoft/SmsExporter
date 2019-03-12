@@ -91,7 +91,18 @@ namespace SmsExporter
                     {
                         index++;
                         var item = enumerator.Current;
-
+                        var typeStr = "";
+                        switch(item.ItemType)
+                        {
+                            case SmsItem.SmsItemType.Send:
+                                typeStr = "发送";
+                                break;
+                            case SmsItem.SmsItemType.Recv:
+                                typeStr = "接收";
+                                break;
+                            default:
+                                continue;
+                        }
                         {
                             var row = sheet.CreateRow(cRowInd);
                             var cell = row.CreateCell(0);
@@ -103,7 +114,7 @@ namespace SmsExporter
                             cell.SetCellType(NPOI.SS.UserModel.CellType.String);
 
                             cell = row.CreateCell(2);
-                            cell.SetCellValue(item.ItemType.ToString());
+                            cell.SetCellValue(typeStr);
                             cell.SetCellType(NPOI.SS.UserModel.CellType.String);
 
                             cell = row.CreateCell(3);
