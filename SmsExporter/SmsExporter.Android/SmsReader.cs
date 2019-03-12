@@ -30,6 +30,7 @@ namespace SmsExporter.Droid
             private Android.Database.ICursor cursor;
             public SmsItem Current => new SmsItem()
             {
+                Id = cursor.GetString(cursor.GetColumnIndex("_id")),
                 Address = cursor.GetString(cursor.GetColumnIndex("address")),
                 Date = DateUtils.ToDateTime(cursor.GetLong(cursor.GetColumnIndex("date"))),
                 ItemType = (SmsItem.SmsItemType)cursor.GetInt(cursor.GetColumnIndex("type")),
@@ -42,7 +43,7 @@ namespace SmsExporter.Droid
             {
                 string SMS_URI_ALL = "content://sms/";
                 var uri = Android.Net.Uri.Parse(SMS_URI_ALL);
-                cursor = reader.GetCursorFunc(uri, new string[] { "address", "date", "type", "body" });
+                cursor = reader.GetCursorFunc(uri, new string[] { "_id", "address", "date", "type", "body" });
             }
 
             public void Dispose()

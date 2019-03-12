@@ -11,6 +11,7 @@ namespace SmsExporter
             Recv = 1,
             Send = 2
         }
+        public string Id { get; set; }
         public string Address { get; set; }
         public DateTime Date { get; set; }
         public SmsItemType ItemType { get; set; }

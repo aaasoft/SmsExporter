@@ -76,10 +76,18 @@ namespace SmsExporter
                     //第一行
                     {
                         var row = sheet.CreateRow(0);
-                        row.CreateCell(0).SetCellValue("号码");
-                        row.CreateCell(1).SetCellValue("时间");
-                        row.CreateCell(2).SetCellValue("类型");
-                        row.CreateCell(3).SetCellValue("内容");
+                        var cColumnInd = 0;
+
+                        row.CreateCell(cColumnInd).SetCellValue("编号");
+                        cColumnInd++;
+                        row.CreateCell(cColumnInd).SetCellValue("号码");
+                        cColumnInd++;
+                        row.CreateCell(cColumnInd).SetCellValue("时间");
+                        cColumnInd++;
+                        row.CreateCell(cColumnInd).SetCellValue("类型");
+                        cColumnInd++;
+                        row.CreateCell(cColumnInd).SetCellValue("内容");
+                        cColumnInd++;
                     }
                     //当前行号
                     var cRowInd = 1;
@@ -104,22 +112,35 @@ namespace SmsExporter
                                 continue;
                         }
                         {
+                            var cColumnInd = 0;
+
                             var row = sheet.CreateRow(cRowInd);
-                            var cell = row.CreateCell(0);
+                            NPOI.SS.UserModel.ICell cell = null;
+
+                            cell = row.CreateCell(cColumnInd);
+                            cell.SetCellValue(item.Id);
+                            cell.SetCellType(NPOI.SS.UserModel.CellType.String);
+                            cColumnInd++;
+
+                            cell = row.CreateCell(cColumnInd);
                             cell.SetCellValue(item.Address);
                             cell.SetCellType(NPOI.SS.UserModel.CellType.String);
+                            cColumnInd++;
 
-                            cell = row.CreateCell(1);
+                            cell = row.CreateCell(cColumnInd);
                             cell.SetCellValue(item.Date.ToString("yyyy-MM-dd HH:mm:ss"));
                             cell.SetCellType(NPOI.SS.UserModel.CellType.String);
+                            cColumnInd++;
 
-                            cell = row.CreateCell(2);
+                            cell = row.CreateCell(cColumnInd);
                             cell.SetCellValue(typeStr);
                             cell.SetCellType(NPOI.SS.UserModel.CellType.String);
+                            cColumnInd++;
 
-                            cell = row.CreateCell(3);
+                            cell = row.CreateCell(cColumnInd);
                             cell.SetCellValue(item.Body);
                             cell.SetCellType(NPOI.SS.UserModel.CellType.String);
+                            cColumnInd++;
                         }
                         cRowInd++;
                         Progress = index * 1D / totalCount;
