@@ -7,8 +7,8 @@ namespace SmsExporter
     public interface ISmsReader
     {
         string GetFolderPath();
-        int GetCount();
+        int GetCount(int startIndex);
         void CheckPermission();
-        IEnumerator<SmsItem> GetEnumerator();
+        IEnumerator<SmsItem> GetEnumerator(int startIndex);
     }
 }

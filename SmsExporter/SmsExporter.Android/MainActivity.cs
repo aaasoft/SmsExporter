@@ -9,7 +9,7 @@ using Android.OS;
 
 namespace SmsExporter.Droid
 {
-    [Activity(Label = "SmsExporter", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "短信导出", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -22,7 +22,7 @@ namespace SmsExporter.Droid
 
             LoadApplication(new App(new SmsReader()
             {
-                GetCursorFunc = (uri, columns) => this.ManagedQuery(uri, columns, null, null, null)
+                GetCursorFunc = (uri, columns, selection) => this.ManagedQuery(uri, columns, selection, null, null)
             }));
             
             //请求权限

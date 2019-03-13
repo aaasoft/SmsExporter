@@ -17,11 +17,12 @@ namespace SmsExporter.Droid
     {
         public const string SMS_URI_ALL = "content://sms/";
 
-        public Func<Android.Net.Uri, string[], Android.Database.ICursor> GetCursorFunc { get; set; }
-        public int GetCount()
+        public Func<Android.Net.Uri, string[], string, Android.Database.ICursor> GetCursorFunc { get; set; }
+
+        public int GetCount(int startIndex)
         {
             var uri = Android.Net.Uri.Parse(SMS_URI_ALL);
-            using (var cursor = GetCursorFunc(uri, null))
+            using (var cursor = GetCursorFunc(uri, null, "_id >= " + startIndex))
                 return cursor.Count;
         }
 
@@ -39,11 +40,14 @@ namespace SmsExporter.Droid
 
             object IEnumerator.Current => this.Current;
 
-            public SmsItemEnumerator(SmsReader reader)
+            public SmsItemEnumerator(SmsReader reader, int startIndex)
             {
                 string SMS_URI_ALL = "content://sms/";
                 var uri = Android.Net.Uri.Parse(SMS_URI_ALL);
-                cursor = reader.GetCursorFunc(uri, new string[] { "_id", "address", "date", "type", "body" });
+                cursor = reader.GetCursorFunc(
+                    uri,
+                    new string[] { "_id", "address", "date", "type", "body" },
+                    "_id >= " + startIndex);
             }
 
             public void Dispose()
@@ -63,9 +67,9 @@ namespace SmsExporter.Droid
             }
         }
 
-        public IEnumerator<SmsItem> GetEnumerator()
+        public IEnumerator<SmsItem> GetEnumerator(int startIndex)
         {
-            return new SmsItemEnumerator(this);
+            return new SmsItemEnumerator(this, startIndex);
         }
 
         public void CheckPermission()
@@ -74,7 +78,7 @@ namespace SmsExporter.Droid
                 Android.Manifest.Permission.ReadSms,
                 Android.Manifest.Permission.WriteExternalStorage
             };
-            foreach(var permission in permissions)
+            foreach (var permission in permissions)
             {
                 if (Android.App.Application.Context.CheckSelfPermission(permission) == Android.Content.PM.Permission.Denied)
                     throw new System.Security.SecurityException($"没有[{permission}]权限。");

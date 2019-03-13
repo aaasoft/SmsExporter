@@ -13,14 +13,27 @@ namespace SmsExporter
     {
         private ISmsReader reader;
 
-        private bool _IsEnable = true;
-        public bool IsEnable
+        private int _StartIndex = 0;
+        public int StartIndex
         {
-            get { return _IsEnable; }
+            get { return _StartIndex; }
             set
             {
-                _IsEnable = true;
+                _StartIndex = value;
+                OnPropertyChanged(nameof(StartIndex));
+            }
+        }
+
+        public bool IsEnable => !IsRunning;
+        private bool _IsRunning = false;
+        public bool IsRunning
+        {
+            get { return _IsRunning; }
+            set
+            {
+                _IsRunning = value;
                 OnPropertyChanged(nameof(IsEnable));
+                OnPropertyChanged(nameof(IsRunning));
             }
         }
 
@@ -58,12 +71,16 @@ namespace SmsExporter
 
         private void executeTestCommand(object obj)
         {
-            Message = reader.GetFolderPath();
+            Message = $@"OSVersion:{Environment.OSVersion}
+MachineName:{Environment.MachineName}
+Is64BitOperatingSystem:{Environment.Is64BitOperatingSystem}
+Is64BitProcess:{Environment.Is64BitProcess}
+CurrentDirectory:{Environment.CurrentDirectory}";
         }
 
         private async void executeExportCommand(object obj)
         {
-            IsEnable = false;
+            IsRunning = true;
             await Task.Run(() =>
             {
                 try
@@ -92,15 +109,15 @@ namespace SmsExporter
                     //当前行号
                     var cRowInd = 1;
 
-                    var totalCount = reader.GetCount();
-                    var enumerator = reader.GetEnumerator();
+                    var totalCount = reader.GetCount(StartIndex);
+                    var enumerator = reader.GetEnumerator(StartIndex);
                     var index = 0;
                     while (enumerator.MoveNext())
                     {
                         index++;
                         var item = enumerator.Current;
                         var typeStr = "";
-                        switch(item.ItemType)
+                        switch (item.ItemType)
                         {
                             case SmsItem.SmsItemType.Send:
                                 typeStr = "发送";
@@ -156,7 +173,7 @@ namespace SmsExporter
                     Message = "错误," + ex;
                 }
             });
-            IsEnable = true;
+            IsRunning = false;
         }
     }
 }

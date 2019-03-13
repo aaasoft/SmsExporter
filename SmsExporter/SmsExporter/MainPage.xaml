@@ -3,16 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SmsExporter"
              x:Class="SmsExporter.MainPage">
-    <StackLayout IsEnabled="{Binding IsEnable}">
+    <StackLayout>
         <!-- Place new controls here -->
         <Label Text="短信导出工具" 
            HorizontalOptions="Center"
            VerticalOptions="CenterAndExpand" />
+        
+        <ActivityIndicator IsRunning="{Binding IsRunning}" />
+        
+        <Label Text="起始序号:" />
+        <Editor HorizontalOptions="Fill" IsEnabled="{Binding IsEnable}" Text="{Binding StartIndex}" />
+        
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <Button Text="导出"  IsEnabled="{Binding IsEnable}" HorizontalOptions="Center" Command="{Binding ExportCommand}" />
+            <Button Text="信息"  IsEnabled="{Binding IsEnable}" HorizontalOptions="Center" Command="{Binding TestCommand}" />
+        </StackLayout>
+        
         <Label HorizontalOptions="Center" LineBreakMode="CharacterWrap" Text="{Binding Message}" />
         <ProgressBar Margin="4" HorizontalOptions="Fill" Progress="{Binding Progress}" />
-        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-            <Button Text="导出" HorizontalOptions="Center" Command="{Binding ExportCommand}" />
-            <Button Text="测试" HorizontalOptions="Center" Command="{Binding TestCommand}" />
-        </StackLayout>
     </StackLayout>
 </ContentPage>
